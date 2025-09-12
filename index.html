@@ -10,4 +10,166 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px;
-            background-color: 
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo img {
+            max-width: 400px;
+            height: auto;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .capability {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #3498db;
+            background-color: #f8f9fa;
+        }
+        .interactive-element {
+            background: #e8f4fd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .interactive-element:hover {
+            background: #d1ecf1;
+        }
+        .contact-info {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+    <script>
+        function showDetails(element) {
+            const details = element.querySelector('.details');
+            if (details.style.display === 'none' || !details.style.display) {
+                details.style.display = 'block';
+                element.style.backgroundColor = '#c3e6cb';
+            } else {
+                details.style.display = 'none';
+                element.style.backgroundColor = '#e8f4fd';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://raw.githubusercontent.com/retailexperts/retailexpertsasset/main/Retail%20Experts%20powered%20(2000x1500).png" alt="Retail Experts Logo">
+        </div>
+        
+        <h1>Interactive Capabilities Brochure</h1>
+        
+        <div class="capability">
+            <h2>Retail Analytics & Business Intelligence</h2>
+            <div class="interactive-element" onclick="showDetails(this)">
+                <strong>Click to explore our analytics capabilities</strong>
+                <div class="details" style="display: none;">
+                    <ul>
+                        <li>Real-time sales performance tracking</li>
+                        <li>Customer behavior analysis</li>
+                        <li>Inventory optimization models</li>
+                        <li>Predictive demand forecasting</li>
+                        <li>Market trend analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="capability">
+            <h2>Digital Transformation Services</h2>
+            <div class="interactive-element" onclick="showDetails(this)">
+                <strong>Discover our digital solutions</strong>
+                <div class="details" style="display: none;">
+                    <ul>
+                        <li>E-commerce platform development</li>
+                        <li>Mobile app solutions</li>
+                        <li>Cloud migration strategies</li>
+                        <li>API integration services</li>
+                        <li>Digital payment systems</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="capability">
+            <h2>Customer Experience Optimization</h2>
+            <div class="interactive-element" onclick="showDetails(this)">
+                <strong>Learn about our CX solutions</strong>
+                <div class="details" style="display: none;">
+                    <ul>
+                        <li>Personalization engines</li>
+                        <li>Customer journey mapping</li>
+                        <li>Omnichannel experience design</li>
+                        <li>Loyalty program development</li>
+                        <li>Customer service automation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="capability">
+            <h2>Supply Chain & Operations</h2>
+            <div class="interactive-element" onclick="showDetails(this)">
+                <strong>Explore our operational expertise</strong>
+                <div class="details" style="display: none;">
+                    <ul>
+                        <li>Supply chain optimization</li>
+                        <li>Warehouse management systems</li>
+                        <li>Vendor relationship management</li>
+                        <li>Quality assurance programs</li>
+                        <li>Logistics coordination</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="capability">
+            <h2>Strategic Consulting</h2>
+            <div class="interactive-element" onclick="showDetails(this)">
+                <strong>See our consulting services</strong>
+                <div class="details" style="display: none;">
+                    <ul>
+                        <li>Market entry strategies</li>
+                        <li>Business model innovation</li>
+                        <li>Performance improvement</li>
+                        <li>Risk assessment & mitigation</li>
+                        <li>Competitive analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-info">
+            <h3>Ready to Transform Your Retail Business?</h3>
+            <p>Contact our team of retail experts today to discuss how we can help accelerate your success.</p>
+            <p><strong>Email:</strong> info@retailexperts.com | <strong>Phone:</strong> 1-800-RETAIL</p>
+        </div>
+    </div>
+</body>
+</html>
