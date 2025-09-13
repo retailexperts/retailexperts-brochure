@@ -416,7 +416,7 @@
         <div class="header">
             <div class="logo-section">
                 <!-- Retail Experts Logo -->
-                <img src="https://raw.githubusercontent.com/retailexperts/retailexpertsasset/main/Retail%20Experts%202000x1500.png" alt="Retail Experts Logo" class="logo-image">
+                <img src="https://raw.githubusercontent.com/retailexperts/retailexpertsasset/main/Retail%20Experts%20powered%20(2000x1500).png" alt="Retail Experts Logo" class="logo-image">
                 <div>
                     <h1>Retail Experts</h1>
                     <p class="tagline">Convenience-Based Retail Center Specialists</p>
@@ -787,6 +787,15 @@
     </div>
     
     <script>
+        // Page turn sound effect
+        const pageSound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZURE');
+        
+        function playPageSound() {
+            pageSound.currentTime = 0;
+            pageSound.volume = 0.3; // Keep volume low
+            pageSound.play().catch(e => console.log('Sound play failed:', e));
+        }
+        
         function showSection(sectionId) {
             // Hide all sections
             const sections = document.querySelectorAll('.content-section');
@@ -801,7 +810,30 @@
             
             // Mark clicked tab as active
             event.target.classList.add('active');
+            
+            // Play page turn sound
+            playPageSound();
         }
+        
+        // Optional: Add sound toggle button
+        function addSoundToggle() {
+            const toggleBtn = document.createElement('button');
+            toggleBtn.innerHTML = '🔊';
+            toggleBtn.style.cssText = 'position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: #012169; color: white; border: none; cursor: pointer; z-index: 1000;';
+            toggleBtn.onclick = function() {
+                if (pageSound.volume === 0) {
+                    pageSound.volume = 0.3;
+                    this.innerHTML = '🔊';
+                } else {
+                    pageSound.volume = 0;
+                    this.innerHTML = '🔇';
+                }
+            };
+            document.body.appendChild(toggleBtn);
+        }
+        
+        // Initialize sound toggle on page load
+        window.addEventListener('DOMContentLoaded', addSoundToggle);
     </script>
 </body>
 </html>
