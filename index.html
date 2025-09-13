@@ -810,28 +810,29 @@
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
             // Create a clean, professional chime sound
-            const duration = 0.4;
-            const fadeIn = 0.02;
-            const fadeOut = 0.2;
+            const duration = 0.8;
+            const fadeIn = 0.05;
+            const fadeOut = 0.4;
             
             function playTransition() {
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
                 const filterNode = audioContext.createBiquadFilter();
                 
-                // Configure clean, professional tone
+                // Configure clean, professional tone - lower pitch
                 oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(520, audioContext.currentTime); // C5 note - clean and professional
-                oscillator.frequency.exponentialRampToValueAtTime(480, audioContext.currentTime + duration);
+                oscillator.frequency.setValueAtTime(260, audioContext.currentTime); // C4 note - lower, warmer
+                oscillator.frequency.exponentialRampToValueAtTime(240, audioContext.currentTime + duration);
                 
                 // Add slight filtering for warmth
                 filterNode.type = 'lowpass';
-                filterNode.frequency.setValueAtTime(2000, audioContext.currentTime);
-                filterNode.Q.setValueAtTime(1, audioContext.currentTime);
+                filterNode.frequency.setValueAtTime(1500, audioContext.currentTime);
+                filterNode.Q.setValueAtTime(0.8, audioContext.currentTime);
                 
-                // Professional volume envelope - quick attack, gentle decay
+                // Professional volume envelope - longer sustain
                 gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.03, audioContext.currentTime + fadeIn);
+                gainNode.gain.linearRampToValueAtTime(0.04, audioContext.currentTime + fadeIn);
+                gainNode.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 0.3);
                 gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
                 
                 // Connect nodes
