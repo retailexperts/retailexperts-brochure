@@ -801,62 +801,78 @@
     
     <script>
         // Professional page transition sound
-        // Using Web Audio API for an exclusive "unlock" sound - conservative for institutional investors
+        // Using Web Audio API to create a realistic page turning sound
         function createPageSound() {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Create a low, sophisticated unlock sound
-            const totalDuration = 0.6;
+            // Create a realistic page turning sound
+            const totalDuration = 0.4;
             
             function playTransition() {
-                // Two phases: gentle ascending tone + soft confirmation
-                const unlockOscillator = audioContext.createOscillator();
-                const confirmOscillator = audioContext.createOscillator();
+                // Create multiple noise sources to simulate paper rustling
+                const noiseBuffer = audioContext.createBuffer(1, audioContext.sampleRate * totalDuration, audioContext.sampleRate);
+                const noiseData = noiseBuffer.getChannelData(0);
                 
-                const unlockGain = audioContext.createGain();
-                const confirmGain = audioContext.createGain();
+                // Generate filtered white noise to simulate paper texture
+                for (let i = 0; i < noiseData.length; i++) {
+                    noiseData[i] = (Math.random() * 2 - 1) * 0.3;
+                }
                 
-                const filterNode = audioContext.createBiquadFilter();
+                const noiseSource = audioContext.createBufferSource();
+                noiseSource.buffer = noiseBuffer;
                 
-                // Phase 1: Gentle ascending unlock tone (lower frequencies)
-                unlockOscillator.type = 'sine';
-                unlockOscillator.frequency.setValueAtTime(180, audioContext.currentTime);
-                unlockOscillator.frequency.exponentialRampToValueAtTime(220, audioContext.currentTime + 0.2);
+                // Create a subtle tone for the "snap" of the page
+                const toneOscillator = audioContext.createOscillator();
+                toneOscillator.type = 'triangle';
+                toneOscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+                toneOscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
                 
-                // Phase 2: Soft confirmation tone
-                confirmOscillator.type = 'sine';
-                confirmOscillator.frequency.setValueAtTime(240, audioContext.currentTime + 0.2);
-                confirmOscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + totalDuration);
+                // Gain nodes for mixing
+                const noiseGain = audioContext.createGain();
+                const toneGain = audioContext.createGain();
+                const masterGain = audioContext.createGain();
                 
-                // Conservative filtering
-                filterNode.type = 'lowpass';
-                filterNode.frequency.setValueAtTime(800, audioContext.currentTime);
-                filterNode.Q.setValueAtTime(0.5, audioContext.currentTime);
+                // Filters to shape the sound
+                const highPassFilter = audioContext.createBiquadFilter();
+                highPassFilter.type = 'highpass';
+                highPassFilter.frequency.setValueAtTime(800, audioContext.currentTime);
                 
-                // Gentle unlock envelope
-                unlockGain.gain.setValueAtTime(0, audioContext.currentTime);
-                unlockGain.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.03);
-                unlockGain.gain.linearRampToValueAtTime(0.015, audioContext.currentTime + 0.15);
-                unlockGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.2);
+                const lowPassFilter = audioContext.createBiquadFilter();
+                lowPassFilter.type = 'lowpass';
+                lowPassFilter.frequency.setValueAtTime(4000, audioContext.currentTime);
+                lowPassFilter.Q.setValueAtTime(0.5, audioContext.currentTime);
                 
-                // Soft confirmation envelope
-                confirmGain.gain.setValueAtTime(0, audioContext.currentTime + 0.2);
-                confirmGain.gain.linearRampToValueAtTime(0.018, audioContext.currentTime + 0.23);
-                confirmGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
+                // Shape the noise envelope (paper rustling)
+                noiseGain.gain.setValueAtTime(0, audioContext.currentTime);
+                noiseGain.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 0.02);
+                noiseGain.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 0.1);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
                 
-                // Connect nodes
-                unlockOscillator.connect(unlockGain);
-                confirmOscillator.connect(confirmGain);
-                unlockGain.connect(filterNode);
-                confirmGain.connect(filterNode);
-                filterNode.connect(audioContext.destination);
+                // Shape the tone envelope (page snap)
+                toneGain.gain.setValueAtTime(0, audioContext.currentTime);
+                toneGain.gain.linearRampToValueAtTime(0.015, audioContext.currentTime + 0.01);
+                toneGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
                 
-                // Play sound
-                unlockOscillator.start(audioContext.currentTime);
-                confirmOscillator.start(audioContext.currentTime + 0.2);
+                // Master volume
+                masterGain.gain.setValueAtTime(0.7, audioContext.currentTime);
                 
-                unlockOscillator.stop(audioContext.currentTime + 0.2);
-                confirmOscillator.stop(audioContext.currentTime + totalDuration);
+                // Connect the audio graph
+                noiseSource.connect(noiseGain);
+                noiseGain.connect(highPassFilter);
+                highPassFilter.connect(lowPassFilter);
+                
+                toneOscillator.connect(toneGain);
+                
+                lowPassFilter.connect(masterGain);
+                toneGain.connect(masterGain);
+                masterGain.connect(audioContext.destination);
+                
+                // Play the sounds
+                noiseSource.start(audioContext.currentTime);
+                toneOscillator.start(audioContext.currentTime);
+                
+                noiseSource.stop(audioContext.currentTime + totalDuration);
+                toneOscillator.stop(audioContext.currentTime + 0.1);
             }
             
             return playTransition;
