@@ -801,78 +801,64 @@
     
     <script>
         // Professional page transition sound
-        // Using Web Audio API to create a realistic page turning sound
+        // Using Web Audio API to create a simple dual note chime
         function createPageSound() {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Create a realistic page turning sound
-            const totalDuration = 0.4;
+            // Create a clean dual note sound
+            const totalDuration = 0.6;
             
             function playTransition() {
-                // Create multiple noise sources to simulate paper rustling
-                const noiseBuffer = audioContext.createBuffer(1, audioContext.sampleRate * totalDuration, audioContext.sampleRate);
-                const noiseData = noiseBuffer.getChannelData(0);
+                // Two complementary notes played together
+                const note1 = audioContext.createOscillator();
+                const note2 = audioContext.createOscillator();
                 
-                // Generate filtered white noise to simulate paper texture
-                for (let i = 0; i < noiseData.length; i++) {
-                    noiseData[i] = (Math.random() * 2 - 1) * 0.3;
-                }
-                
-                const noiseSource = audioContext.createBufferSource();
-                noiseSource.buffer = noiseBuffer;
-                
-                // Create a subtle tone for the "snap" of the page
-                const toneOscillator = audioContext.createOscillator();
-                toneOscillator.type = 'triangle';
-                toneOscillator.frequency.setValueAtTime(400, audioContext.currentTime);
-                toneOscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
-                
-                // Gain nodes for mixing
-                const noiseGain = audioContext.createGain();
-                const toneGain = audioContext.createGain();
+                const gain1 = audioContext.createGain();
+                const gain2 = audioContext.createGain();
                 const masterGain = audioContext.createGain();
                 
-                // Filters to shape the sound
-                const highPassFilter = audioContext.createBiquadFilter();
-                highPassFilter.type = 'highpass';
-                highPassFilter.frequency.setValueAtTime(800, audioContext.currentTime);
+                // Professional dual note frequencies - perfect fifth interval
+                note1.type = 'sine';
+                note1.frequency.setValueAtTime(262, audioContext.currentTime); // C4 - clean, professional
                 
-                const lowPassFilter = audioContext.createBiquadFilter();
-                lowPassFilter.type = 'lowpass';
-                lowPassFilter.frequency.setValueAtTime(4000, audioContext.currentTime);
-                lowPassFilter.Q.setValueAtTime(0.5, audioContext.currentTime);
+                note2.type = 'sine';
+                note2.frequency.setValueAtTime(392, audioContext.currentTime); // G4 - perfect fifth above C4
                 
-                // Shape the noise envelope (paper rustling)
-                noiseGain.gain.setValueAtTime(0, audioContext.currentTime);
-                noiseGain.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 0.02);
-                noiseGain.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 0.1);
-                noiseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
+                // Clean filtering
+                const filter = audioContext.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(1500, audioContext.currentTime);
+                filter.Q.setValueAtTime(0.5, audioContext.currentTime);
                 
-                // Shape the tone envelope (page snap)
-                toneGain.gain.setValueAtTime(0, audioContext.currentTime);
-                toneGain.gain.linearRampToValueAtTime(0.015, audioContext.currentTime + 0.01);
-                toneGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                // Smooth, professional envelope for both notes
+                gain1.gain.setValueAtTime(0, audioContext.currentTime);
+                gain1.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.05);
+                gain1.gain.linearRampToValueAtTime(0.018, audioContext.currentTime + 0.2);
+                gain1.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
+                
+                gain2.gain.setValueAtTime(0, audioContext.currentTime);
+                gain2.gain.linearRampToValueAtTime(0.015, audioContext.currentTime + 0.05);
+                gain2.gain.linearRampToValueAtTime(0.013, audioContext.currentTime + 0.2);
+                gain2.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
                 
                 // Master volume
-                masterGain.gain.setValueAtTime(0.7, audioContext.currentTime);
+                masterGain.gain.setValueAtTime(1, audioContext.currentTime);
                 
-                // Connect the audio graph
-                noiseSource.connect(noiseGain);
-                noiseGain.connect(highPassFilter);
-                highPassFilter.connect(lowPassFilter);
+                // Connect the dual note sound
+                note1.connect(gain1);
+                note2.connect(gain2);
                 
-                toneOscillator.connect(toneGain);
-                
-                lowPassFilter.connect(masterGain);
-                toneGain.connect(masterGain);
+                gain1.connect(filter);
+                gain2.connect(filter);
+                filter.connect(masterGain);
                 masterGain.connect(audioContext.destination);
                 
-                // Play the sounds
-                noiseSource.start(audioContext.currentTime);
-                toneOscillator.start(audioContext.currentTime);
+                // Play both notes simultaneously
+                note1.start(audioContext.currentTime);
+                note2.start(audioContext.currentTime);
                 
-                noiseSource.stop(audioContext.currentTime + totalDuration);
-                toneOscillator.stop(audioContext.currentTime + 0.1);
+                note1.stop(audioContext.currentTime + totalDuration);
+                note2.stop(audioContext.currentTime + totalDuration);
             }
             
             return playTransition;
