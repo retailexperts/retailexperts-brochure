@@ -805,44 +805,62 @@
     
     <script>
         // Professional page transition sound
-        // Using Web Audio API for a clean, professional chime
+        // Using Web Audio API for an exclusive "unlock" sound
         function createPageSound() {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Create a clean, professional chime sound
-            const duration = 0.8;
-            const fadeIn = 0.05;
-            const fadeOut = 0.4;
+            // Create an exclusive unlock sound
+            const totalDuration = 0.5;
             
             function playTransition() {
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
+                // Create two phases: ascending unlock tone + satisfying pop
+                const unlockOscillator = audioContext.createOscillator();
+                const popOscillator = audioContext.createOscillator();
+                
+                const unlockGain = audioContext.createGain();
+                const popGain = audioContext.createGain();
+                
                 const filterNode = audioContext.createBiquadFilter();
                 
-                // Configure clean, professional tone - lower pitch
-                oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(260, audioContext.currentTime); // C4 note - lower, warmer
-                oscillator.frequency.exponentialRampToValueAtTime(240, audioContext.currentTime + duration);
+                // Phase 1: Ascending unlock tone (first 0.2s)
+                unlockOscillator.type = 'sine';
+                unlockOscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+                unlockOscillator.frequency.exponentialRampToValueAtTime(450, audioContext.currentTime + 0.15);
                 
-                // Add slight filtering for warmth
+                // Phase 2: Satisfying "pop" (brief, at 0.15s)
+                popOscillator.type = 'sine';
+                popOscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.15);
+                popOscillator.frequency.exponentialRampToValueAtTime(500, audioContext.currentTime + totalDuration);
+                
+                // Add premium filtering
                 filterNode.type = 'lowpass';
-                filterNode.frequency.setValueAtTime(1500, audioContext.currentTime);
-                filterNode.Q.setValueAtTime(0.8, audioContext.currentTime);
+                filterNode.frequency.setValueAtTime(1200, audioContext.currentTime);
+                filterNode.Q.setValueAtTime(0.7, audioContext.currentTime);
                 
-                // Professional volume envelope - longer sustain
-                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.04, audioContext.currentTime + fadeIn);
-                gainNode.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 0.3);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+                // Unlock tone envelope
+                unlockGain.gain.setValueAtTime(0, audioContext.currentTime);
+                unlockGain.gain.linearRampToValueAtTime(0.025, audioContext.currentTime + 0.02);
+                unlockGain.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.12);
+                unlockGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.15);
+                
+                // Pop envelope - brief and satisfying
+                popGain.gain.setValueAtTime(0, audioContext.currentTime + 0.15);
+                popGain.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 0.17);
+                popGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
                 
                 // Connect nodes
-                oscillator.connect(filterNode);
-                filterNode.connect(gainNode);
-                gainNode.connect(audioContext.destination);
+                unlockOscillator.connect(unlockGain);
+                popOscillator.connect(popGain);
+                unlockGain.connect(filterNode);
+                popGain.connect(filterNode);
+                filterNode.connect(audioContext.destination);
                 
                 // Play sound
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + duration);
+                unlockOscillator.start(audioContext.currentTime);
+                popOscillator.start(audioContext.currentTime + 0.15);
+                
+                unlockOscillator.stop(audioContext.currentTime + 0.15);
+                popOscillator.stop(audioContext.currentTime + totalDuration);
             }
             
             return playTransition;
