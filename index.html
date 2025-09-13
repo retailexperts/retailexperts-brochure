@@ -434,7 +434,7 @@
         <div class="header">
             <div class="logo-section">
                 <!-- Retail Experts Logo -->
-                <img src="https://raw.githubusercontent.com/retailexperts/retailexpertsasset/main/Retail%20Experts%20(300%20x%20225%20px).png" alt="Retail Experts Logo" class="logo-image" style="max-width: 600px; height: auto; width: 100%; max-width: min(600px, 80vw);">
+                <img src="https://raw.githubusercontent.com/retailexperts/retailexpertsasset/main/Retail%20Experts%20(912%20x%20684%20px).png" alt="Retail Experts Logo" class="logo-image" style="max-width: 600px; height: auto; width: 100%; max-width: min(600px, 80vw);">
                 <div>
                     <p class="tagline">Convenience-Based Retail Center Specialists</p>
                 </div>
@@ -805,62 +805,62 @@
     
     <script>
         // Professional page transition sound
-        // Using Web Audio API for an exclusive "unlock" sound
+        // Using Web Audio API for an exclusive "unlock" sound - conservative for institutional investors
         function createPageSound() {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Create an exclusive unlock sound
-            const totalDuration = 0.5;
+            // Create a low, sophisticated unlock sound
+            const totalDuration = 0.6;
             
             function playTransition() {
-                // Create two phases: ascending unlock tone + satisfying pop
+                // Two phases: gentle ascending tone + soft confirmation
                 const unlockOscillator = audioContext.createOscillator();
-                const popOscillator = audioContext.createOscillator();
+                const confirmOscillator = audioContext.createOscillator();
                 
                 const unlockGain = audioContext.createGain();
-                const popGain = audioContext.createGain();
+                const confirmGain = audioContext.createGain();
                 
                 const filterNode = audioContext.createBiquadFilter();
                 
-                // Phase 1: Ascending unlock tone (first 0.2s)
+                // Phase 1: Gentle ascending unlock tone (lower frequencies)
                 unlockOscillator.type = 'sine';
-                unlockOscillator.frequency.setValueAtTime(300, audioContext.currentTime);
-                unlockOscillator.frequency.exponentialRampToValueAtTime(450, audioContext.currentTime + 0.15);
+                unlockOscillator.frequency.setValueAtTime(180, audioContext.currentTime);
+                unlockOscillator.frequency.exponentialRampToValueAtTime(220, audioContext.currentTime + 0.2);
                 
-                // Phase 2: Satisfying "pop" (brief, at 0.15s)
-                popOscillator.type = 'sine';
-                popOscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.15);
-                popOscillator.frequency.exponentialRampToValueAtTime(500, audioContext.currentTime + totalDuration);
+                // Phase 2: Soft confirmation tone
+                confirmOscillator.type = 'sine';
+                confirmOscillator.frequency.setValueAtTime(240, audioContext.currentTime + 0.2);
+                confirmOscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + totalDuration);
                 
-                // Add premium filtering
+                // Conservative filtering
                 filterNode.type = 'lowpass';
-                filterNode.frequency.setValueAtTime(1200, audioContext.currentTime);
-                filterNode.Q.setValueAtTime(0.7, audioContext.currentTime);
+                filterNode.frequency.setValueAtTime(800, audioContext.currentTime);
+                filterNode.Q.setValueAtTime(0.5, audioContext.currentTime);
                 
-                // Unlock tone envelope
+                // Gentle unlock envelope
                 unlockGain.gain.setValueAtTime(0, audioContext.currentTime);
-                unlockGain.gain.linearRampToValueAtTime(0.025, audioContext.currentTime + 0.02);
-                unlockGain.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.12);
-                unlockGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.15);
+                unlockGain.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.03);
+                unlockGain.gain.linearRampToValueAtTime(0.015, audioContext.currentTime + 0.15);
+                unlockGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.2);
                 
-                // Pop envelope - brief and satisfying
-                popGain.gain.setValueAtTime(0, audioContext.currentTime + 0.15);
-                popGain.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 0.17);
-                popGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
+                // Soft confirmation envelope
+                confirmGain.gain.setValueAtTime(0, audioContext.currentTime + 0.2);
+                confirmGain.gain.linearRampToValueAtTime(0.018, audioContext.currentTime + 0.23);
+                confirmGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
                 
                 // Connect nodes
                 unlockOscillator.connect(unlockGain);
-                popOscillator.connect(popGain);
+                confirmOscillator.connect(confirmGain);
                 unlockGain.connect(filterNode);
-                popGain.connect(filterNode);
+                confirmGain.connect(filterNode);
                 filterNode.connect(audioContext.destination);
                 
                 // Play sound
                 unlockOscillator.start(audioContext.currentTime);
-                popOscillator.start(audioContext.currentTime + 0.15);
+                confirmOscillator.start(audioContext.currentTime + 0.2);
                 
-                unlockOscillator.stop(audioContext.currentTime + 0.15);
-                popOscillator.stop(audioContext.currentTime + totalDuration);
+                unlockOscillator.stop(audioContext.currentTime + 0.2);
+                confirmOscillator.stop(audioContext.currentTime + totalDuration);
             }
             
             return playTransition;
