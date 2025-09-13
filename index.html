@@ -2,44 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <!-- iOS specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
     <title>Retail Experts - Capabilities Brochure</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on iOS */
         }
         
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
+        html {
+            -webkit-text-size-adjust: 100%; /* Prevent font size adjustment on iOS */
+            scroll-behavior: smooth;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
+            overflow-x: hidden;
+            width: 100%;
+            /* iOS safe area support */
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            /* Safe area padding for iOS */
+            padding-left: max(20px, env(safe-area-inset-left));
+            padding-right: max(20px, env(safe-area-inset-right));
         }
         
-        /* Header - FIXED: Added top padding */
+        /* Header - Mobile optimized */
         .header {
             background: white;
-            padding: 30px 20px 30px 20px; /* FIXED: Added 30px top padding */
+            padding: 30px 20px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border-radius: 10px;
             margin-bottom: 40px;
             position: relative;
-            overflow: visible; /* FIXED: Changed from hidden to visible to prevent clipping */
+            overflow: visible;
         }
         
         .header::before {
@@ -52,75 +65,76 @@
             background: #c41e3a;
         }
         
-        /* Logo Section - FIXED: Removed negative margin */
         .logo-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin: 0; /* FIXED: Removed negative top margin */
-            flex-wrap: wrap;
+            margin: 0;
         }
         
-        /* Added specific styling for logo image to ensure proper display */
         .logo-image {
             width: 100%;
             max-width: 700px;
             height: auto;
-            display: block; /* Ensures proper block-level display */
-            margin: 0 auto; /* Centers the image */
+            display: block;
+            margin: 0 auto;
         }
         
         h1 {
-            font-size: 2.5em;
+            font-size: clamp(1.8em, 5vw, 2.5em); /* Responsive font sizing */
             color: #2c3e50;
             font-weight: 300;
             letter-spacing: -1px;
+            word-wrap: break-word;
         }
         
         .tagline {
-            font-size: 1.2em;
+            font-size: clamp(1em, 3vw, 1.2em);
             color: #7f8c8d;
             margin: 10px 0;
             font-weight: 300;
+            padding: 0 10px;
         }
         
-        .powered-by {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            font-size: 0.9em;
-            color: #666;
-        }
-        
-        /* Navigation Tabs */
+        /* Navigation Tabs - Mobile optimized */
         .nav-tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
             justify-content: center;
             flex-wrap: wrap;
+            padding: 0 10px;
         }
         
         .tab-btn {
-            padding: 15px 30px;
+            padding: 15px 20px;
             background: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: clamp(0.95em, 2.5vw, 1.1em);
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
+            min-height: 44px; /* iOS minimum touch target */
+            min-width: 44px;
+            touch-action: manipulation; /* Improve touch responsiveness */
+            -webkit-touch-callout: none;
+            flex: 1 1 auto;
+            text-align: center;
         }
         
-        .tab-btn:hover {
+        .tab-btn:hover, .tab-btn:focus {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            outline: none;
+        }
+        
+        .tab-btn:active {
+            transform: translateY(0);
         }
         
         .tab-btn.active {
@@ -154,18 +168,26 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
         
-        /* Cards */
+        /* Cards - Mobile optimized */
         .card {
             background: white;
-            padding: 30px;
+            padding: clamp(20px, 4vw, 30px);
             margin-bottom: 25px;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .card:hover {
@@ -176,22 +198,29 @@
         .card h2 {
             color: #2c3e50;
             margin-bottom: 20px;
-            font-size: 1.8em;
+            font-size: clamp(1.4em, 4vw, 1.8em);
             border-left: 4px solid #c41e3a;
             padding-left: 15px;
+            word-wrap: break-word;
         }
         
         .card h3 {
             color: #34495e;
             margin: 20px 0 15px;
-            font-size: 1.3em;
+            font-size: clamp(1.1em, 3vw, 1.3em);
+            word-wrap: break-word;
         }
         
-        /* Feature Grid */
+        .card p {
+            font-size: clamp(0.95em, 2.5vw, 1.1em);
+            line-height: 1.7;
+        }
+        
+        /* Feature Grid - Mobile responsive */
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+            gap: 15px;
             margin: 20px 0;
         }
         
@@ -202,6 +231,7 @@
             border-radius: 10px;
             text-align: center;
             transition: transform 0.3s ease;
+            min-height: 100px;
         }
         
         .feature-item:hover {
@@ -209,11 +239,15 @@
         }
         
         .feature-item h4 {
-            font-size: 1.2em;
+            font-size: clamp(1em, 2.5vw, 1.2em);
             margin-bottom: 10px;
         }
         
-        /* Process Timeline */
+        .feature-item p {
+            font-size: clamp(0.9em, 2vw, 1em);
+        }
+        
+        /* Timeline - Mobile optimized */
         .timeline {
             position: relative;
             padding: 20px 0;
@@ -223,6 +257,7 @@
             display: flex;
             margin-bottom: 20px;
             position: relative;
+            align-items: flex-start;
         }
         
         .timeline-dot {
@@ -230,16 +265,18 @@
             height: 20px;
             background: #c41e3a;
             border-radius: 50%;
-            margin-right: 20px;
+            margin-right: 15px;
             position: relative;
             z-index: 2;
+            flex-shrink: 0;
         }
         
         .timeline-content {
             flex: 1;
-            padding: 10px 20px;
+            padding: 10px 15px;
             background: #f8f9fa;
             border-radius: 8px;
+            font-size: clamp(0.9em, 2.5vw, 1em);
         }
         
         .timeline::before {
@@ -252,17 +289,17 @@
             background: #e0e0e0;
         }
         
-        /* Stats */
+        /* Stats Grid - Mobile responsive */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+            gap: 15px;
             margin: 30px 0;
         }
         
         .stat-card {
             text-align: center;
-            padding: 25px;
+            padding: clamp(15px, 3vw, 25px);
             background: linear-gradient(135deg, #012169 0%, #418FDE 100%);
             color: white;
             border-radius: 10px;
@@ -274,21 +311,21 @@
         }
         
         .stat-number {
-            font-size: 2.5em;
+            font-size: clamp(1.8em, 5vw, 2.5em);
             font-weight: bold;
             margin-bottom: 10px;
         }
         
         .stat-label {
-            font-size: 1em;
+            font-size: clamp(0.85em, 2vw, 1em);
             opacity: 0.95;
         }
         
-        /* Marketing Tiers */
+        /* Marketing Tiers - Mobile responsive */
         .tier-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+            gap: 15px;
             margin: 30px 0;
         }
         
@@ -319,7 +356,7 @@
         }
         
         .tier-name {
-            font-size: 1.5em;
+            font-size: clamp(1.2em, 3vw, 1.5em);
             color: #2c3e50;
             margin-bottom: 10px;
             font-weight: 600;
@@ -328,25 +365,26 @@
         .tier-range {
             color: #7f8c8d;
             margin-bottom: 15px;
-            font-size: 1.1em;
+            font-size: clamp(0.95em, 2.5vw, 1.1em);
         }
         
         .tier-value {
-            font-size: 2em;
+            font-size: clamp(1.5em, 4vw, 2em);
             color: #012169;
             font-weight: bold;
         }
         
-        /* Lists */
+        /* Lists - Mobile optimized */
         ul {
             list-style: none;
             padding-left: 0;
         }
         
         ul li {
-            padding: 10px 0;
-            padding-left: 30px;
+            padding: 12px 0 12px 35px;
             position: relative;
+            font-size: clamp(0.9em, 2.5vw, 1em);
+            line-height: 1.6;
         }
         
         ul li::before {
@@ -358,44 +396,232 @@
             font-size: 1.2em;
         }
         
-        /* CTA Section */
+        /* CTA Section - Mobile optimized */
         .cta-section {
             background: linear-gradient(135deg, #012169 0%, #2c3e50 100%);
             color: white;
-            padding: 40px;
+            padding: clamp(30px, 5vw, 40px);
             border-radius: 10px;
             text-align: center;
             margin-top: 40px;
         }
         
         .cta-section h2 {
-            font-size: 2em;
+            font-size: clamp(1.5em, 4vw, 2em);
             margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            font-size: clamp(1em, 2.5vw, 1.2em);
         }
         
         .cta-button {
             display: inline-block;
-            padding: 15px 40px;
+            padding: 15px 30px;
             background: white;
             color: #012169;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
             transition: all 0.3s ease;
-            margin: 10px;
+            margin: 10px 5px;
+            font-size: clamp(0.9em, 2.5vw, 1em);
+            min-height: 44px; /* iOS touch target */
+            min-width: 120px;
+            line-height: 1.2;
+            touch-action: manipulation;
         }
         
-        .cta-button:hover {
+        .cta-button:hover, .cta-button:focus {
             transform: scale(1.05);
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            outline: none;
         }
         
-        /* Responsive */
+        .cta-button:active {
+            transform: scale(1);
+        }
+        
+        /* Video responsive */
+        video {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        /* Sound toggle button - Mobile optimized */
+        .sound-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #012169;
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Mobile specific styles */
         @media (max-width: 768px) {
-            h1 { font-size: 2em; }
-            .nav-tabs { flex-direction: column; }
-            .tab-btn { width: 100%; }
-            .header { padding: 20px 15px; } /* Adjusted padding for mobile */
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+            
+            .nav-tabs {
+                gap: 8px;
+                padding: 0 5px;
+            }
+            
+            .tab-btn {
+                padding: 12px 15px;
+                font-size: 0.95em;
+                min-width: auto;
+                flex: 1 1 calc(50% - 4px); /* Two columns on mobile */
+            }
+            
+            .card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .card:hover {
+                transform: none; /* Disable hover transform on mobile */
+            }
+            
+            .feature-grid, .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .tier-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .timeline-content {
+                padding: 10px 12px;
+            }
+            
+            .cta-button {
+                display: block;
+                width: calc(100% - 40px);
+                margin: 10px auto;
+            }
+            
+            /* Disable hover effects on touch devices */
+            @media (hover: none) {
+                .card:hover {
+                    transform: none;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                }
+                
+                .feature-item:hover {
+                    transform: none;
+                }
+                
+                .tier-card:hover {
+                    transform: none;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                }
+                
+                .stat-card:hover {
+                    transform: none;
+                }
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 380px) {
+            .tab-btn {
+                flex: 1 1 100%; /* Full width on very small screens */
+                padding: 12px 10px;
+            }
+            
+            .logo-image {
+                max-width: 100%;
+            }
+            
+            ul li {
+                padding-left: 28px;
+                font-size: 0.9em;
+            }
+        }
+        
+        /* Tablet styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tier-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Large desktop styles */
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1400px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .nav-tabs,
+            .sound-toggle {
+                display: none;
+            }
+            
+            .content-section {
+                display: block !important;
+                page-break-inside: avoid;
+            }
+            
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+        
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            /* Optional: Add dark mode styles here if needed */
         }
     </style>
 </head>
@@ -405,7 +631,10 @@
         <div class="header">
             <div class="logo-section">
                 <!-- Retail Experts Logo -->
-                <img src="https://raw.githubusercontent.com/retailexperts/retailexpertsasset/main/Copy%20of%20Retail%20Experts%20powered%20(912%20x%20684%20px).png" alt="Retail Experts Logo" class="logo-image">
+                <img src="https://raw.githubusercontent.com/retailexperts/retailexpertsasset/main/Copy%20of%20Retail%20Experts%20powered%20(912%20x%20684%20px).png" 
+                     alt="Retail Experts Logo" 
+                     class="logo-image"
+                     loading="eager">
                 <div>
                     <p class="tagline">Convenience-Based Retail Center Specialists</p>
                 </div>
@@ -413,14 +642,14 @@
         </div>
         
         <!-- Navigation -->
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="showSection('overview')">Overview</button>
-            <button class="tab-btn" onclick="showSection('lease')">Lease Services</button>
-            <button class="tab-btn" onclick="showSection('sale')">Sale Services</button>
-            <button class="tab-btn" onclick="showSection('marketing')">Marketing Power</button>
-            <button class="tab-btn" onclick="showSection('testimonials')">Client Success</button>
-            <button class="tab-btn" onclick="showSection('why-us')">Why Choose Us</button>
-        </div>
+        <nav class="nav-tabs" role="navigation" aria-label="Main navigation">
+            <button class="tab-btn active" onclick="showSection('overview', event)" aria-current="page">Overview</button>
+            <button class="tab-btn" onclick="showSection('lease', event)">Lease Services</button>
+            <button class="tab-btn" onclick="showSection('sale', event)">Sale Services</button>
+            <button class="tab-btn" onclick="showSection('marketing', event)">Marketing Power</button>
+            <button class="tab-btn" onclick="showSection('testimonials', event)">Client Success</button>
+            <button class="tab-btn" onclick="showSection('why-us', event)">Why Choose Us</button>
+        </nav>
         
         <!-- Content Sections -->
         
@@ -677,9 +906,9 @@
                     </div>
                     
                     <!-- Video Testimonial -->
-                    <div class="video-testimonial">
+                    <div class="video-testimonial" style="margin-top: 30px;">
                         <h3>Featured Client Testimonial</h3>
-                        <video controls poster="">
+                        <video controls poster="" playsinline preload="metadata">
                             <source src="https://github.com/retailexperts/retailexpertsasset/raw/refs/heads/main/testimonial-video.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -767,15 +996,12 @@
     
     <script>
         // Professional page transition sound
-        // Using Web Audio API to create a simple dual note chime
         function createPageSound() {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Create a clean dual note sound
             const totalDuration = 0.6;
             
             function playTransition() {
-                // Two complementary notes played together
                 const note1 = audioContext.createOscillator();
                 const note2 = audioContext.createOscillator();
                 
@@ -783,20 +1009,17 @@
                 const gain2 = audioContext.createGain();
                 const masterGain = audioContext.createGain();
                 
-                // Professional dual note frequencies - perfect fifth interval
                 note1.type = 'sine';
-                note1.frequency.setValueAtTime(262, audioContext.currentTime); // C4 - clean, professional
+                note1.frequency.setValueAtTime(262, audioContext.currentTime);
                 
                 note2.type = 'sine';
-                note2.frequency.setValueAtTime(392, audioContext.currentTime); // G4 - perfect fifth above C4
+                note2.frequency.setValueAtTime(392, audioContext.currentTime);
                 
-                // Clean filtering
                 const filter = audioContext.createBiquadFilter();
                 filter.type = 'lowpass';
                 filter.frequency.setValueAtTime(1500, audioContext.currentTime);
                 filter.Q.setValueAtTime(0.5, audioContext.currentTime);
                 
-                // Smooth, professional envelope for both notes
                 gain1.gain.setValueAtTime(0, audioContext.currentTime);
                 gain1.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.05);
                 gain1.gain.linearRampToValueAtTime(0.018, audioContext.currentTime + 0.2);
@@ -807,10 +1030,8 @@
                 gain2.gain.linearRampToValueAtTime(0.013, audioContext.currentTime + 0.2);
                 gain2.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + totalDuration);
                 
-                // Master volume
                 masterGain.gain.setValueAtTime(1, audioContext.currentTime);
                 
-                // Connect the dual note sound
                 note1.connect(gain1);
                 note2.connect(gain2);
                 
@@ -819,7 +1040,6 @@
                 filter.connect(masterGain);
                 masterGain.connect(audioContext.destination);
                 
-                // Play both notes simultaneously
                 note1.start(audioContext.currentTime);
                 note2.start(audioContext.currentTime);
                 
@@ -833,63 +1053,109 @@
         let soundEnabled = true;
         let playPageSound = null;
         
-        // Initialize sound after user interaction (required for browsers)
         function initializeSound() {
             if (!playPageSound) {
-                playPageSound = createPageSound();
+                try {
+                    playPageSound = createPageSound();
+                } catch (e) {
+                    console.log('Audio not supported');
+                }
             }
         }
         
-        function showSection(sectionId) {
+        function showSection(sectionId, event) {
+            // Prevent default if event exists
+            if (event) {
+                event.preventDefault();
+            }
+            
             // Hide all sections
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(section => section.classList.remove('active'));
             
             // Remove active from all tabs
             const tabs = document.querySelectorAll('.tab-btn');
-            tabs.forEach(tab => tab.classList.remove('active'));
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.removeAttribute('aria-current');
+            });
             
-            // Show selected section with smooth transition
+            // Show selected section
             setTimeout(() => {
                 document.getElementById(sectionId).classList.add('active');
             }, 50);
             
             // Mark clicked tab as active
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+                event.target.setAttribute('aria-current', 'page');
+            }
             
-            // Play transition sound if enabled
+            // Play transition sound if enabled and available
             if (soundEnabled && playPageSound) {
                 try {
                     playPageSound();
                 } catch (e) {
-                    console.log('Sound initialization needed');
+                    console.log('Sound playback failed');
                 }
+            }
+            
+            // Scroll to top of content on mobile
+            if (window.innerWidth <= 768) {
+                window.scrollTo({
+                    top: document.querySelector('.nav-tabs').offsetTop - 20,
+                    behavior: 'smooth'
+                });
             }
         }
         
         // Sound toggle button
         function addSoundToggle() {
             const toggleBtn = document.createElement('button');
+            toggleBtn.className = 'sound-toggle';
             toggleBtn.innerHTML = '🔊';
             toggleBtn.title = 'Toggle sound effects';
-            toggleBtn.style.cssText = 'position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: #012169; color: white; border: none; cursor: pointer; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: transform 0.2s;';
-            toggleBtn.onmouseover = function() { this.style.transform = 'scale(1.1)'; };
-            toggleBtn.onmouseout = function() { this.style.transform = 'scale(1)'; };
+            toggleBtn.setAttribute('aria-label', 'Toggle sound effects');
+            
             toggleBtn.onclick = function() {
                 soundEnabled = !soundEnabled;
                 this.innerHTML = soundEnabled ? '🔊' : '🔇';
+                this.setAttribute('aria-label', soundEnabled ? 'Mute sound effects' : 'Unmute sound effects');
                 if (soundEnabled && !playPageSound) {
                     initializeSound();
                 }
             };
+            
             document.body.appendChild(toggleBtn);
         }
         
         // Initialize on first user interaction
         document.addEventListener('click', initializeSound, { once: true });
+        document.addEventListener('touchstart', initializeSound, { once: true });
         
         // Add sound toggle on page load
-        window.addEventListener('DOMContentLoaded', addSoundToggle);
+        window.addEventListener('DOMContentLoaded', function() {
+            addSoundToggle();
+            
+            // Ensure videos don't autoplay on mobile
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.setAttribute('playsinline', '');
+                video.setAttribute('preload', 'metadata');
+            });
+        });
+        
+        // Handle orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 1);
+            }, 100);
+        });
+        
+        // Improve iOS scrolling
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            document.body.style.webkitOverflowScrolling = 'touch';
+        }
     </script>
 </body>
 </html>
